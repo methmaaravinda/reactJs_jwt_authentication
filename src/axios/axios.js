@@ -1,0 +1,22 @@
+import axios from "axios";
+import useRefreshToken from "../hooks/useRefreshToken";
+
+const axiosPrivate=axios.create({
+    baseURL:"http://localhost:3000",
+})
+
+axiosPrivate.interceptors.response.use(function (response) {
+    return response;
+  }, async function (error) {
+    if(error.response?.data?.err?.name=="TokenExpiredError"){
+      const accessToken=await useRefreshToken();
+      if(accessToken){
+      error.config.headers.Authorization="Bearer "+accessToken;
+      return axiosPrivate(error.config);
+      }
+      return Promise.reject(error);
+    }
+    return Promise.reject(error);
+  });
+ 
+  export {axiosPrivate};
