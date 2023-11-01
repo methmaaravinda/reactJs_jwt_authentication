@@ -2,14 +2,15 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import { Row, Col } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import {axiosPrivate} from "./axios/axios"
-
+import { AuthContext } from './context/AuthContext';
 
 function Login() {
   const [user, setUser]=useState({email:"", password:"", accessToken:""});
   const [endPoint, setEndPoint]=useState({endPoint: ""});
+  const {user:User}=useContext(AuthContext);
 
   useEffect(()=>{
     const controller=new AbortController();
@@ -92,7 +93,7 @@ function Login() {
     })
 
   },[endPoint])
-  
+
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -135,7 +136,7 @@ function Login() {
           </div>
         </Col>
       </Row>
-      <Button onClick={()=>setEndPoint(prev=> ({...prev, endPoint:"refreshToken"}))}>refresh Token</Button>
+      {/* <Button onClick={()=>setEndPoint(prev=> ({...prev, endPoint:"refreshToken"}))}>refresh Token</Button> */}
       <Button onClick={()=>setEndPoint(prev=> ({...prev, endPoint:"hello"}))}>test</Button>
     </Container>
   );
