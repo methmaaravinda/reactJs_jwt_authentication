@@ -8,11 +8,17 @@ function User() {
         <Container>
             <Row className="justify-content-center mt-3">
                 <h1>
-                    <Badge bg="secondary">email : {user?.email}</Badge>
+                    <Badge bg="secondary">email : </Badge>
                 </h1>
+                <p>
+                    {user?.email}
+                </p>
                 <h1>
-                    <Badge bg="secondary">accessToken : {user?.accessToken}</Badge>
+                    <Badge bg="secondary">accessToken : </Badge>
                 </h1>
+                <p>
+                    {user?.accessToken}
+                </p>
             </Row>
         </Container>
     )

@@ -1,16 +1,18 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Spinner } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import {axiosPrivate} from "./axios/axios"
 import { AuthContext } from './context/AuthContext';
+import "./css/login.css"
 
 function Login() {
   const [user, setUser]=useState({email:"", password:"", accessToken:""});
   const [endPoint, setEndPoint]=useState({endPoint: ""});
-  const {user:User}=useContext(AuthContext);
+  const {user:User, setUser:SetUser}=useContext(AuthContext);
+  const [loging, setLoging]=useState({isLoading:false, data: null, error: false})
 
   useEffect(()=>{
     const controller=new AbortController();
@@ -33,6 +35,7 @@ function Login() {
     if(endPoint.endPoint=="login"){
       const handleLogin = async () => {
         try{
+          setLoging(prev=> ({...prev, isLoading: true}))
           const res=await axios.post("http://localhost:3000/login",
             {user},
             {
@@ -40,9 +43,12 @@ function Login() {
               signal:controller.signal
             }
           );
+          setLoging(prev=>({...prev, isLoading:false, data: res?.data}))
           const accessToken =res?.data?.accessToken;
           setUser(prev=> ({...prev, accessToken}))
+          SetUser(prev=> ({...prev, accessToken}))
         }catch(err){
+          setLoging(prev=> ({...prev, isLoading:false, error: err }))
           console.log(err+" error from loging! ")
         }
       }
@@ -94,6 +100,16 @@ function Login() {
 
   },[endPoint])
 
+  const spinner = loging.isLoading && (
+    <Spinner
+      as="span"
+      animation="border"
+      size="sm"
+      role="status"
+      aria-hidden="true"
+    />
+  );
+  
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -103,15 +119,34 @@ function Login() {
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" onChange={(e)=> setUser(prev=> ({...prev, email:e.target.value}))}/>
+              <Form.Control 
+                className={loging?.error ? "err_border_clr": ""}
+                type="email" 
+                placeholder="Enter email" 
+                onChange={(e)=> setUser(prev=> ({...prev, email:e.target.value}))}
+                onFocus={(e) => setLoging((prev) => {
+                  return prev.error ? { ...prev, error: false } : prev;
+                })}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" onChange={(e)=> setUser(prev=> ({...prev, password:e.target.value}))}/>
+              <Form.Control 
+                className={loging?.error ? "err_border_clr": ""}
+                type="password" 
+                placeholder="Password" 
+                onChange={(e)=> setUser(prev=> ({...prev, password:e.target.value}))}
+                onFocus={(e)=> setLoging(prev=> (prev.error ?{...prev, error: false} : prev) )}
+              />
             </Form.Group>
             <div className="d-flex justify-content-between align-items-center">
-              <Button variant="primary" type="submit" onClick={(e)=>{ e.preventDefault(); setEndPoint(prev=> ({...prev, endPoint:"login"})) }}>
+              <Button 
+                variant="primary" 
+                type="submit" 
+                onClick={(e)=>{ e.preventDefault(); setEndPoint(prev=> ({...prev, endPoint:"login"})) }}
+              >
+                {spinner}
                 Log In
               </Button>
               <Button
@@ -136,8 +171,6 @@ function Login() {
           </div>
         </Col>
       </Row>
-      {/* <Button onClick={()=>setEndPoint(prev=> ({...prev, endPoint:"refreshToken"}))}>refresh Token</Button> */}
-      <Button onClick={()=>setEndPoint(prev=> ({...prev, endPoint:"hello"}))}>test</Button>
     </Container>
   );
 }
