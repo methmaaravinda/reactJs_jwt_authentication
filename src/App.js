@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Login from './Login'
 import "bootstrap/dist/css/bootstrap.min.css"
-import User from './User'
 import { Route, Routes } from 'react-router-dom'
 import SignUp from './SignUp'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import Inside from './Inside'
 
 function App() {
   const queryClient=new QueryClient();
@@ -14,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login/>} />
           <Route path='/signup' element={<SignUp/>} />
+          <Route path='/inside' element={<Inside/>} />
         </Routes>
       </div>
     </QueryClientProvider>

@@ -1,5 +1,5 @@
-import {axiosPrivate} from '../axios/axios'
-//endPoints
+import {axiosPrivate} from '../axios/axios';
+
 const SIGNUP_URL="http://localhost:3000/signUp";
 const LOGIN_URL="http://localhost:3000/login";
 
