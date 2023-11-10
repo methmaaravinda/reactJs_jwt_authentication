@@ -16,7 +16,7 @@ function SignUp() {
   });
   const [fetchError, setFetchError] = useState(false);
   const navigate = useNavigate();
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+  const { isLoading, isError, error, refetch } = useQuery(
     "signUp",
     () => signUpQuery(user),
     {

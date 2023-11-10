@@ -16,7 +16,7 @@ function Login() {
   });
   const [fetchError, setFetchError] = useState(false);
   const navigate = useNavigate();
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+  const { isLoading,isError, error, refetch } = useQuery(
     "login",
     () => logingQuery(user),
     {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Login from './Login'
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Route, Routes } from 'react-router-dom'

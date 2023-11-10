@@ -11,7 +11,7 @@ const axiosPrivate=axios.create({
 axiosPrivate.interceptors.response.use(function (response) {
     return response;
   }, async function (error) {
-    if(error.response?.data?.err?.name=="TokenExpiredError"){
+    if(error.response?.data?.err?.name==="TokenExpiredError"){
       const accessToken=await useRefreshToken();
       const {setUser}=useContext(AuthContext);
       setUser(prev=>({...prev, accessToken}))
