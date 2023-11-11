@@ -10,7 +10,6 @@ import { useQuery } from "react-query";
 
 function SignUp() {
   console.log(process.env.REACT_APP_BASE_URL, "envs")
-  console.log(process.env.REACT_APP_X, "valX")
   const [user, setUser] = useState({
     email: "",
     password: "",
