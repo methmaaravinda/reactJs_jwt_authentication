@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 
 function SignUp() {
-  console.log(process.env.REACT_APP_BASE_URL, "envs")
+  console.log(process.env.REACT_APP_BASE_URL, "new env")
   const [user, setUser] = useState({
     email: "",
     password: "",
