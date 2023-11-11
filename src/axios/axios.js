@@ -5,7 +5,8 @@ import { AuthContext } from "../context/AuthContext";
 
 
 const axiosPrivate=axios.create({
-    baseURL:"http://localhost:3000",
+    baseURL: process.env.BASE_URL,
+    withCredentials: true,
 })
 
 axiosPrivate.interceptors.response.use(function (response) {
