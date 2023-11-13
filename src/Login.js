@@ -24,7 +24,7 @@ function Login() {
     {
       enabled: false,
       onError: () => setFetchError(true),
-      //onSuccess: () => navigate("/inside"),
+      onSuccess: () => navigate("/user"),
       retry: 0,
     }
   );
@@ -108,14 +108,6 @@ function Login() {
         <Col className="" lg={6}>
           <h1 className="text-center bg-danger">
             {fetchError && error?.message}
-          </h1>
-        </Col>
-      </Row>
-      <Row className="justify-content-center mt-3 ">
-        <Col className="" lg={6}>
-          <h1 className="text-center bg-danger">
-           {authUser?.email}
-           {authUser?.accessToken}
           </h1>
         </Col>
       </Row>
