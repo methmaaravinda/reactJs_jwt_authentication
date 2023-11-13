@@ -24,7 +24,7 @@ function Login() {
     {
       enabled: false,
       onError: () => setFetchError(true),
-      onSuccess: () => navigate("/inside"),
+      //onSuccess: () => navigate("/inside"),
       retry: 0,
     }
   );
