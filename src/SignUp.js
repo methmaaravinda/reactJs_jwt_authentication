@@ -31,7 +31,7 @@ function SignUp() {
     <Container>
       <Row className="justify-content-center mt-3">
         <Col lg={6}>
-          <h1>Sign Up</h1>
+          <h1>Sign Up 1</h1>
           <hr />
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
