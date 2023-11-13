@@ -2,13 +2,15 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { Row, Col, Spinner } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { logingQuery } from "./servicers/queries";
 import "./css/login.css";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
+import { AuthContext } from "./context/AuthContext";
 
 function Login() {
+  const {setUser: authSetUser, user: authUser}=useContext(AuthContext);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -16,7 +18,7 @@ function Login() {
   });
   const [fetchError, setFetchError] = useState(false);
   const navigate = useNavigate();
-  const { isLoading,isError, error, refetch } = useQuery(
+  const { isLoading, error,data: response, refetch } = useQuery(
     "login",
     () => logingQuery(user),
     {
@@ -26,6 +28,14 @@ function Login() {
       retry: 0,
     }
   );
+
+  const handleClick=async()=>{
+    await refetch();
+    const accessToken =response?.data?.accessToken;
+    const email=response?.data?.email;
+    authSetUser({accessToken, email});
+    setUser({email:null, password: null});
+  }
 
   return (
     <Container>
@@ -78,11 +88,7 @@ function Login() {
                     color: "white",
                   },
                 }}
-                onClick={() => {
-                  refetch();
-                  !isError &&
-                    setUser((prev) => ({ ...prev, email: "", password: "" }));
-                }}
+                onClick={handleClick}
               >
                 {isLoading && (
                   <>
@@ -102,6 +108,14 @@ function Login() {
         <Col className="" lg={6}>
           <h1 className="text-center bg-danger">
             {fetchError && error?.message}
+          </h1>
+        </Col>
+      </Row>
+      <Row className="justify-content-center mt-3 ">
+        <Col className="" lg={6}>
+          <h1 className="text-center bg-danger">
+           {authUser?.email}
+           {authUser?.accessToken}
           </h1>
         </Col>
       </Row>
