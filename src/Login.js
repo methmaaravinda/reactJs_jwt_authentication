@@ -2,15 +2,16 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { Row, Col, Spinner } from "react-bootstrap";
-import { useContext, useState } from "react";
-import { logingQuery } from "./servicers/queries";
+import { useContext, useEffect, useState } from "react";
 import "./css/login.css";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { AuthContext } from "./context/AuthContext";
+import useRQ from "./hooks/useRQ";
 
 function Login() {
-  const {setUser: authSetUser, user: authUser}=useContext(AuthContext);
+  const {logingQuery}=useRQ();
+  const {setUser: authSetUser}=useContext(AuthContext);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -18,24 +19,38 @@ function Login() {
   });
   const [fetchError, setFetchError] = useState(false);
   const navigate = useNavigate();
-  const { isLoading, error,data: response, refetch } = useQuery(
+  const { isLoading, isFetching, error,data: response, refetch } = useQuery(
     "login",
     () => logingQuery(user),
     {
       enabled: false,
       onError: () => setFetchError(true),
-      onSuccess: () => navigate("/user"),
+      onSuccess: () =>{
+        // navigate("/user/1")
+      },
       retry: 0,
     }
   );
 
   const handleClick=async()=>{
     await refetch();
-    const accessToken =response?.data?.accessToken;
-    const email=response?.data?.email;
-    authSetUser({accessToken, email});
-    setUser({email:null, password: null});
   }
+  useEffect(() => {
+    // Check if the response has data and update the context accordingly
+    if (response?.data) {
+      const accessToken = response.data.accessToken;
+      const email = response.data.email;
+      authSetUser((prev) => ({ ...prev, email, accessToken }));
+      // You might want to navigate to another page after successful login
+      navigate("/user/1");
+    }
+    // Clean up user state after updating context
+    setUser({
+      email: "",
+      password: "",
+      accessToken: "",
+    });
+  }, [response, authSetUser, navigate]);
 
   return (
     <Container>
@@ -69,28 +84,22 @@ function Login() {
               />
             </Form.Group>
             <div className="d-flex justify-content-between align-items-center">
-              <Button
-                variant="primary"
-                type="submit"
-                onClick={() => navigate("/signUp")}
-              >
-                Sign Up
-              </Button>
+              <div>
+                  <span>Need An Account? </span>
+                  <Button
+                    variant="primary"
+                    onClick={() => navigate("/signUp")}
+                    style={{ backgroundColor: "white", color: "black" , borderColor: "black"}}
+                    disabled={isLoading || isFetching}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
               <Button
                 disabled={!(user?.email && user?.password)}
-                variant="secondary"
-                style={{
-                  backgroundColor: "white",
-                  color: "black",
-                  transition: "background-color 0.3s, color 0.3s",
-                  ":hover": {
-                    backgroundColor: "black",
-                    color: "white",
-                  },
-                }}
                 onClick={handleClick}
               >
-                {isLoading && (
+                { (isLoading || isFetching) && (
                   <>
                     <Spinner animation="grow" size="sm" /> &nbsp;
                   </>
@@ -99,9 +108,6 @@ function Login() {
               </Button>
             </div>
           </Form>
-          <div className="mt-3">
-            <a href="/forgot-password">Forgot Password?</a>
-          </div>
         </Col>
       </Row>
       <Row className="justify-content-center mt-3 ">

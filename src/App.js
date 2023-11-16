@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import SignUp from './SignUp'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import User from './User'
+import PaginationBar from './PeginationBar'
 
 function App() {
   const queryClient=new QueryClient();
@@ -14,7 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login/>} />
           <Route path='/signup' element={<SignUp/>} />
-          <Route path='/user' element={<User/>} />
+          <Route path='/user/:page' element={<PaginationBar/>}/>
         </Routes>
       </div>
     </QueryClientProvider>
