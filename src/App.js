@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Route, Routes } from 'react-router-dom'
 import SignUp from './SignUp'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import User from './User'
+// import User from './User'
 import PaginationBar from './PeginationBar'
 
 function App() {

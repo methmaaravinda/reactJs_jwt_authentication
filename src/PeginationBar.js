@@ -20,12 +20,11 @@ const PaginationBar = () => {
 
   useEffect(()=>{
     refetch();
-  },[page]);
+  },[page, refetch]);
 
   useEffect(()=>{
     setData(response?.data?.profiles);
   },[response])
-//https://fastly.picsum.photos/id/155/200/
   // const [length, setLength]=useState(6);
   const [data, setData]=useState(
     [
@@ -82,7 +81,7 @@ const PaginationBar = () => {
       <Pagination.Item
         key={`page-${number}`}
         active={number === active}
-        onClick={() => { setActive(number); navigate("/user"+`/${number}`); }}
+        onClick={() => { setActive(number); navigate(`/user/${number}`); }}
       >
         {number}
       </Pagination.Item>,

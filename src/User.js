@@ -1,10 +1,11 @@
-import { Container, Pagination, Row, Col } from 'react-bootstrap'
-import PeginationBar from './PeginationBar'
+// import { Container, Pagination, Row, Col } from 'react-bootstrap'
+// import PeginationBar from './PeginationBar'
 
-function User() {
-    return (
-        <PeginationBar/>
-    )
-}
+// function User() {
+    
+//     return (
+//         <PeginationBar/>
+//     )
+// }
 
-export default User
+// export default User
