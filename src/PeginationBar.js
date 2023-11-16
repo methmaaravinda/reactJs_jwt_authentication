@@ -9,7 +9,7 @@ const PaginationBar = () => {
   let {page}=useParams();
   page=Number(page);
   const {usersQuery}=useRQ();
-  const {refetch}=useQuery(
+  const {refetch, data: response}=useQuery(
     ["users", page], 
     ()=>usersQuery(page),
     {
@@ -20,8 +20,12 @@ const PaginationBar = () => {
 
   useEffect(()=>{
     refetch();
-  },[page])
+  },[page]);
 
+  useEffect(()=>{
+    setData(response?.data?.profiles);
+  },[response])
+//https://fastly.picsum.photos/id/155/200/
   // const [length, setLength]=useState(6);
   const [data, setData]=useState(
     [
@@ -70,7 +74,6 @@ const PaginationBar = () => {
     ]
   );
   
-  // useEffect(()=>{ console.log("page", page); refetch();},[]);
   const navigate=useNavigate();
 
   const items = [];
@@ -98,13 +101,13 @@ const PaginationBar = () => {
         </Col>
       </Row>
       <Row className="mt-3">
-        {data.map((item) => (
+        {data?.map((item) => (
           <Col key={item.id} xs={12} md={6}>
             <Row className={"border rounded p-3 mb-3 mx-2 bg-light"}>
-              <Col xs={3} >
-                <img src={item.avatar} alt={`user${item}`} />
+              <Col xs={5} >
+                <img src={`https://picsum.photos/id/${item.id}/200`} alt={`user${item}`} />
               </Col>
-              <Col xs={9}>
+              <Col xs={7}>
                 <h5>Email : {item.email}</h5>
                 <h5>First name : {item.first_name}</h5>
                 <h5>Last name : {item.last_name}</h5>

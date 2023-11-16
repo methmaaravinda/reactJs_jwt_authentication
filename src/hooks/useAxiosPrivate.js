@@ -26,7 +26,11 @@ const useAxiosPrivate=()=>{
         const responseInterceptor=axiosPrivate.interceptors.response.use(
             response=> response,
             async(error)=> {
-                if (error.response.data.err?.name === "TokenExpiredError" && !error.config?.sent){
+                if (
+                    (error.response.data.err?.name === "TokenExpiredError" 
+                    || error.response.data.err?.name === "JsonWebTokenError")
+                     && !error.config?.sent
+                    ){
                     const accessToken=await refresh();
                     error.config.sent=true;
                     error.config.headers.Authorization=`Bearer ${accessToken}`;
